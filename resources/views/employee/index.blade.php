@@ -6,7 +6,7 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <a href="{{ route('create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 m-1 mb-2">Crear nuevo producto</a>
+            <a href="{{ route('employees.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 m-1 mb-2">Crear nuevo producto</a>
         </div>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -46,7 +46,7 @@
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <div class="flex items-center">
                                                         <div class="ml-4">
-                                                            {{ $employee->gender }}
+                                                            {{ $employee->gender === 'M'? 'Masculino': 'Femenino' }}
                                                         </div>
                                                     </div>
                                                 </td>
@@ -67,14 +67,14 @@
                                                 <td class="px-6 py-4 whitespace-wrap">
                                                     <div class="flex items-center">
                                                         <div class="ml-4">
-                                                            <i class="fas fa-edit"></i>
+                                                            <i id="{{ $employee->id }}" class="fas fa-edit text-indigo-500 employee_edit cursor-pointer"></i>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-wrap">
                                                     <div class="flex items-center">
                                                         <div class="ml-4">
-                                                            <i class="fas fa-trash"></i>
+                                                            <i id="{{ $employee->id }}" class="fas fa-trash text-red-500 employee_delete cursor-pointer"></i>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -91,3 +91,39 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+
+    const categoryDeleteElements = document.getElementsByClassName('employee_delete');
+    const categoryEditElements = document.getElementsByClassName('employee_edit');
+
+    Array.from(categoryEditElements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            const id = this.getAttribute('id')
+            window.location.href = `{{ url('employees') }}/${ id }/edit`
+        });
+    });
+
+    Array.from(categoryDeleteElements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            const id = this.getAttribute('id')
+            const url = `{{ url('employees') }}/${id}`
+            const formData = new FormData();
+            formData.append("_method", "delete");
+            formData.append("_token", "{{csrf_token()}}");
+            const requestOptions = {
+                method: 'post',
+                body: formData,
+                redirect: 'follow'
+            };
+            fetch(url, requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status) {
+                        location.reload();
+                    }
+                })
+                .catch(error => console.log('error', error));
+        });
+    });
+</script>

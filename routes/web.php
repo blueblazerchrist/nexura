@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/', EmployeeController::class);
+Route::get('/', function () {
+    return redirect()->route('employees.index');
+});
+
+Route::resource('employees', EmployeeController::class);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
