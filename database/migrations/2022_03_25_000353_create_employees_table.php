@@ -19,7 +19,7 @@ class CreateEmployeesTable extends Migration
             $table->string('email');
             $table->char('gender', 1);
             $table->unsignedBigInteger('department_id');
-            $table->integer('newsletter');
+            $table->integer('newsletter')->default(0);
             $table->text('description');
             $table->timestamps();
         });

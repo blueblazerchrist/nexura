@@ -53,14 +53,14 @@
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <div class="flex items-center">
                                                         <div class="ml-4">
-                                                            {{ $employee->department_id }}
+                                                            {{ $employee->department->name ?? '' }}
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <div class="flex items-center">
                                                         <div class="ml-4">
-                                                            {{ $employee->newsletter }}
+                                                            {{ $employee->newsletter ? 'Si' : 'No' }}
                                                         </div>
                                                     </div>
                                                 </td>
@@ -82,6 +82,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                {{ $employees->links() }}
                             </div>
                         </div>
                     </div>

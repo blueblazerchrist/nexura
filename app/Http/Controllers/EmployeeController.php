@@ -10,6 +10,7 @@ use App\Models\Role\Role;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class EmployeeController extends Controller
 {
@@ -20,17 +21,16 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::paginate(15);
+        $employees = Employee::paginate(10);
         return view('employee.index', compact('employees'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreEmployeeRequest $request
      * @return Application|Factory|View
      */
-    public function create(StoreEmployeeRequest $request)
+    public function create()
     {
         $roles = Role::all();
         $departments = Department::all();
@@ -41,11 +41,14 @@ class EmployeeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param StoreEmployeeRequest $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function store(StoreEmployeeRequest $request)
+    public function store(StoreEmployeeRequest $request): RedirectResponse
     {
-        //
+        $requestEmployee = $request->all();
+        $employee = Employee::create($requestEmployee);
+        $employee->roles()->sync($requestEmployee['roles']);
+        return  redirect()->route('/');
     }
 
     /**
