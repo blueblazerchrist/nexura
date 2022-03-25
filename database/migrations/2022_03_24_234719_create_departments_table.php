@@ -15,8 +15,24 @@ class CreateDepartmentsTable extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
+
+        $departments = [
+            'Administrativa y Financiera',
+            'Ingeniería',
+            'Desarrollo de Negocio',
+            'Proyectos',
+            'Servicios',
+            'Calidad',
+        ];
+
+        foreach ($departments as $department) {
+            \Illuminate\Support\Facades\DB::table('departments')->insert([
+                'name' => $department
+            ]);
+        }
     }
 
     /**

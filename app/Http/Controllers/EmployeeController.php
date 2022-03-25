@@ -4,24 +4,43 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Models\Department\Department;
 use App\Models\Employee\Employee;
+use App\Models\Role\Role;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index()
     {
-        //
+        $employees = Employee::paginate(15);
+        return view('employee.index', compact('employees'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreEmployeeRequest  $request
+     * @param StoreEmployeeRequest $request
+     * @return Application|Factory|View
+     */
+    public function create(StoreEmployeeRequest $request)
+    {
+        $roles = Role::all();
+        $departments = Department::all();
+        return view('employee.create', compact('roles', 'departments'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param StoreEmployeeRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreEmployeeRequest $request)
