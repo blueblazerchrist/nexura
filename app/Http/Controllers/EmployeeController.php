@@ -51,7 +51,7 @@ class EmployeeController extends Controller
         $requestEmployee = $request->all();
         $employee = Employee::create($requestEmployee);
         $employee->roles()->sync($requestEmployee['roles']);
-        return  redirect()->route('/');
+        return  redirect()->route('employees.index');
     }
 
     /**
